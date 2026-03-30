@@ -1,0 +1,290 @@
+<!DOCTYPE html><html lang="ru"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-id="th-modified">Мой Большой Интернет-Словарь</title>
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --bg: #1a1a2e;
+            --card-bg: #16213e;
+            --text: #e94560;
+            --subtext: #ffffff;
+        }
+        
+        html, body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg); 
+            color: var(--subtext); 
+            margin: 0; 
+            padding: 20px 20px 50px 20px;
+            line-height: 1.6; 
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        
+        header { 
+            text-align: center; 
+            padding: 30px 0; 
+        }
+        
+        h1 { 
+            color: var(--text); 
+            font-size: 2.5em; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin-bottom: 5px; 
+        }
+        
+        .counter { 
+            color: #888; 
+            margin-bottom: 20px; 
+            font-size: 0.9em; 
+        }
+        
+        .search-box { 
+            display: block; 
+            width: 90%; 
+            max-width: 600px; 
+            margin: 0 auto 40px; 
+            padding: 15px 25px; 
+            border: 2px solid var(--text); 
+            border-radius: 30px; 
+            background: transparent; 
+            color: white; 
+            font-size: 18px; 
+            outline: none; 
+            transition: 0.3s; 
+        }
+        
+        .search-box:focus { 
+            box-shadow: 0 0 15px var(--text); 
+        }
+        
+        .dictionary { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            display: grid; 
+            gap: 15px; 
+        }
+        
+        .word-card { 
+            background: var(--card-bg); 
+            padding: 18px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            border-left: 5px solid var(--text); 
+            transition: 0.2s; 
+            position: relative; 
+        }
+        
+        .word-card:hover { 
+            transform: translateY(-2px); 
+            background: #1f2d52; 
+        }
+        
+        .word-title { 
+            font-size: 20px; 
+            font-weight: bold; 
+            color: var(--text); 
+        }
+        
+        .details { 
+            display: none; 
+            margin-top: 12px; 
+            border-top: 1px solid #30475e; 
+            padding-top: 12px; 
+            animation: fadeIn 0.3s; 
+            color: #ddd; 
+        }
+        
+        .word-card.active .details { 
+            display: block; 
+        }
+
+        .example {
+            margin-top: 8px;
+            color: #4A90E2;
+            font-style: italic;
+        }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
+        }
+        
+        .no-results { 
+            text-align: center; 
+            color: #888; 
+            margin-top: 50px; 
+        }
+    </style>
+<meta property="og:title" content="Мой Большой Интернет-Словарь" data-id="th-modified"><meta property="og:image" content="https://tiiny.host/assets/logo-purple-bg.png" data-id="th-modified"><meta property="og:url" content="https://orange-mirelle-21.tiiny.site/" data-id="th-modified"><meta property="og:type" content="website" data-id="th-modified"><script defer="" data-domain="orange-mirelle-21.tiiny.site" src="https://analytics.tiiny.site/js/plausible.js"></script><script type="text/javascript" src="https://tiiny.host/ad-script.js"></script></head>
+<body>
+
+<header>
+    <h1>СЛОВАРЬ ПРОЕКТА</h1>
+    <div class="counter" id="count-info">Загрузка слов...</div>
+    <input type="text" id="search" class="search-box" placeholder="Начни вводить слово (например: Кринж)...">
+</header>
+
+<div class="dictionary" id="dictionary"></div>
+
+<script>
+    // ТВОЙ ПОЛНЫЙ СПИСОК (100+ СЛОВ) С ПРИМЕРАМИ
+    const words = [
+        { term: "Абьюз", meaning: "Психологическое или физическое насилие.", example: "В их отношениях был абьюз, поэтому они расстались." },
+        { term: "Абьюзер", meaning: "Человек, проявляющий насилие.", example: "Он настоящий абьюзер - постоянно унижает свою девушку." },
+        { term: "Агриться", meaning: "Злиться, проявлять агрессию.", example: "Не агрись, это всего лишь игра!" },
+        { term: "Актуалочка", meaning: "Актуальная тема.", example: "Новый мем - просто актуалочка дня!" },
+        { term: "Аноним", meaning: "Пользователь без имени.", example: "В этом чате сидит какой-то аноним и троллит всех." },
+        { term: "Ауф", meaning: "Выражение одобрения.", example: "Ты выиграл турнир? Ауф, красавчик!" },
+        { term: "База", meaning: "Что-то очевидно правильное.", example: "Учиться программировать - это база, без этого никуда." },
+        { term: "Байтить", meaning: "Провоцировать.", example: "Он специально байтит меня, чтобы я начал спорить." },
+        { term: "Бан", meaning: "Блокировка аккаунта.", example: "За оскорбления дали бан на неделю." },
+        { term: "Банить", meaning: "Блокировать пользователя.", example: "Если будешь спамить, админ забанит тебя." },
+        { term: "Баян", meaning: "Старая шутка или новость.", example: "Этот мем я видел год назад, это баян." },
+        { term: "Блогер", meaning: "Человек, ведущий блог.", example: "Известный блогер снял обзор на новый телефон." },
+        { term: "Бот", meaning: "Автоматическая программа.", example: "В комментариях одни боты пишут." },
+        { term: "Буллинг", meaning: "Травля.", example: "В школе был буллинг, и ребенка пришлось перевести." },
+        { term: "Бумер", meaning: "Человек старшего поколения.", example: "Мой папа - бумер, не понимает мемы." },
+        { term: "Вайб", meaning: "Атмосфера, настроение.", example: "У этой компании летний вайб." },
+        { term: "Вброс", meaning: "Провокационная информация.", example: "Не верь этой новости, это вброс." },
+        { term: "Видос", meaning: "Видео.", example: "Скинь тот видос с котом, поржать." },
+        { term: "Виральный", meaning: "Быстро распространяющийся.", example: "Ролик стал виральным за сутки." },
+        { term: "Вписка", meaning: "Неформальная встреча.", example: "На выходных будет вписка, приходи." },
+        { term: "Гайд", meaning: "Инструкция.", example: "Посмотрел гайд, как проходить этот уровень." },
+        { term: "Гамать", meaning: "Играть.", example: "Вчера до утра гамал в новую игру." },
+        { term: "Го", meaning: "Пойдём, давай.", example: "Го в кино сегодня вечером?" },
+        { term: "Гостинг", meaning: "Резкое прекращение общения.", example: "Мы неделю общались, а потом он сделал гостинг." },
+        { term: "Гуглить", meaning: "Искать информацию в интернете.", example: "Если не знаешь ответ, просто загугли." },
+        { term: "Дедлайн", meaning: "Крайний срок.", example: "До дедлайна осталось 2 часа, надо спешить." },
+        { term: "Дизлайк", meaning: "Отрицательная оценка.", example: "Ролик получил много дизлайков." },
+        { term: "Донат", meaning: "Добровольное пожертвование.", example: "Стримеру кинули донат 1000 рублей." },
+        { term: "Дроп", meaning: "Выпуск (например, коллекции).", example: "Новый дроп кроссовок выйдет в пятницу." },
+        { term: "Душнила", meaning: "Человек, который всё усложняет.", example: "Не будь душнилой, расслабься." },
+        { term: "Жиза", meaning: "Жизненно, правдиво.", example: "Опоздать на автобус - жиза." },
+        { term: "Забанить", meaning: "Отправить в бан.", example: "Тебя забанили за спам в чате." },
+        { term: "Залететь", meaning: "Стать популярным.", example: "Его трек залетел в топ-чарты." },
+        { term: "Зашквар", meaning: "Позорная ситуация.", example: "Носить две разные носки - зашквар." },
+        { term: "Зумер", meaning: "Представитель молодого поколения.", example: "Зумеры не понимают, как жить без интернета." },
+        { term: "Имба", meaning: "Что-то очень сильное, крутое.", example: "Новый скин в игре - просто имба!" },
+        { term: "ИМХО", meaning: "По моему мнению.", example: "ИМХО, этот фильд лучше первой части." },
+        { term: "Инфлюенсер", meaning: "Популярный блогер.", example: "Инфлюенсеры рекламируют этот товар." },
+        { term: "Инсайд", meaning: "Скрытая информация.", example: "У меня есть инсайд, что выйдет новая версия." },
+        { term: "Инста", meaning: "Социальная сеть.", example: "Скинь свой ник в инсте." },
+        { term: "Капсить", meaning: "Писать заглавными буквами.", example: "Не капси, это считается криком." },
+        { term: "Кастом", meaning: "Индивидуальный, изменённый.", example: "У него кастомная клавиатура с подсветкой." },
+        { term: "Кейс", meaning: "Ситуация, случай.", example: "Рассмотрим другой кейс из жизни." },
+        { term: "Кликбейт", meaning: "Громкий заголовок ради просмотров.", example: "Заголовок 'Ты не поверишь' - чистый кликбейт." },
+        { term: "Коммент", meaning: "Комментарий.", example: "Оставь коммент под видео." },
+        { term: "Контент", meaning: "Публикуемый материал.", example: "Он снимает контент про путешествия." },
+        { term: "Кринж", meaning: "Чувство неловкости.", example: "Смотреть его танцы - сплошной кринж." },
+        { term: "Краш", meaning: "Объект симпатии.", example: "Она мой краш с первого курса." },
+        { term: "Криповый", meaning: "Пугающий.", example: "Этот звук ночью был очень криповый." },
+        { term: "Куратор", meaning: "Администратор проекта.", example: "Куратор проверил домашнее задание." },
+        { term: "Лайк", meaning: "Положительная отметка.", example: "Поставь лайк, если согласен." },
+        { term: "Лайкнуть", meaning: "Поставить лайк.", example: "Лайкни моё фото в инсте." },
+        { term: "Ламповый", meaning: "Уютный.", example: "У них ламповая квартира с камином." },
+        { term: "Левел", meaning: "Уровень.", example: "Какой левел в игре?" },
+        { term: "Лол", meaning: "Смешно.", example: "Он упал в лужу, лол." },
+        { term: "Лонгрид", meaning: "Длинная статья.", example: "Прочитал лонгрид про историю интернета." },
+        { term: "Лут", meaning: "Награда в игре.", example: "С босса выпал редкий лут." },
+        { term: "Мем", meaning: "Популярная шутка-картинка.", example: "Этот мем завирусился в тиктоке." },
+        { term: "Мут", meaning: "Временное ограничение общения.", example: "Дали мут в чате на час." },
+        { term: "Нуб", meaning: "Неопытный игрок.", example: "Не слушай его, он нуб." },
+        { term: "Ник", meaning: "Псевдоним.", example: "Придумай ник для игры." },
+        { term: "Нормис", meaning: "Обычный человек.", example: "Для нормисов это покажется странным." },
+        { term: "Овер", meaning: "Слишком.", example: "Это овер дорого, я не куплю." },
+        { term: "Олд", meaning: "Старый.", example: "Это олд школа, молодежь не поймет." },
+        { term: "Онлайн", meaning: "В сети.", example: "Он всегда онлайн в телеграме." },
+        { term: "Оффлайн", meaning: "Вне сети.", example: "Встретимся оффлайн в кафе." },
+        { term: "Оффтоп", meaning: "Сообщение не по теме.", example: "Прости за оффтоп, но..." },
+        { term: "Паблик", meaning: "Открытая группа.", example: "Подпишись на наш паблик." },
+        { term: "Палить", meaning: "Замечать, разоблачать.", example: "Я тебя палю, хватит прятаться." },
+        { term: "Патч", meaning: "Обновление.", example: "Вышел новый патч с исправлениями." },
+        { term: "Пиар", meaning: "Продвижение.", example: "Этот блогер занимается пиаром." },
+        { term: "Пост", meaning: "Публикация.", example: "Написал пост про путешествие." },
+        { term: "Пранк", meaning: "Розыгрыш.", example: "Мы разыграли друга, это был пранк." },
+        { term: "Пруф", meaning: "Доказательство.", example: "Скинь пруфы своих слов." },
+        { term: "Пуш", meaning: "Уведомление.", example: "Пришел пуш о новом сообщении." },
+        { term: "Разлогиниться", meaning: "Выйти из аккаунта.", example: "Разлогинься и зайди снова." },
+        { term: "Рандом", meaning: "Случайный.", example: "Мы встретились рандомно в парке." },
+        { term: "Реакция", meaning: "Отклик на сообщение.", example: "Его реакция была неожиданной." },
+        { term: "Репост", meaning: "Повторная публикация.", example: "Сделай репост этой записи." },
+        { term: "Рилс", meaning: "Короткое видео.", example: "Снимаю рилс в инстаграме." },
+        { term: "Рофл", meaning: "Шутка.", example: "Это был рофл, не обижайся." },
+        { term: "Саб", meaning: "Подписчик.", example: "У него миллион сабов на ютубе." },
+        { term: "Скам", meaning: "Мошенничество.", example: "Не ведись, это скам." },
+        { term: "Скилл", meaning: "Навык.", example: "Прокачивай скилл программирования." },
+        { term: "Скрин", meaning: "Снимок экрана.", example: "Скинь скрин переписки." },
+        { term: "Слив", meaning: "Распространение личной информации.", example: "В сеть слили базу данных." },
+        { term: "Смайл", meaning: "Значок эмоции.", example: "Поставь смайлик в конце сообщения." },
+        { term: "Спам", meaning: "Навязанные сообщения.", example: "Мне приходит спам на почту." },
+        { term: "Сторис", meaning: "Временная публикация.", example: "Посмотри мои сторис, пока не сгорели." },
+        { term: "Стрим", meaning: "Прямая трансляция.", example: "Стрим начнется через 5 минут." },
+        { term: "Таргет", meaning: "Целевая реклама.", example: "Настроил таргет на молодежь." },
+        { term: "Токсик", meaning: "Неприятный, агрессивный человек.", example: "Он токсик, с ним невозможно общаться." },
+        { term: "Тренд", meaning: "Популярное направление.", example: "Этот танец сейчас в тренде." },
+        { term: "Тролль", meaning: "Провокатор в сети.", example: "Не корми тролля, не отвечай ему." },
+        { term: "Туториал", meaning: "Обучающее видео.", example: "Посмотрел туториал по макияжу." },
+        { term: "Фейк", meaning: "Подделка.", example: "Это фейковый аккаунт." },
+        { term: "Фидбек", meaning: "Обратная связь.", example: "Оставьте фидбек о работе." },
+        { term: "Флексить", meaning: "Хвастаться.", example: "Он флексит новой машиной." },
+        { term: "Флуд", meaning: "Бессмысленные сообщения.", example: "Хватит флудить в чате." },
+        { term: "Фолловер", meaning: "Подписчик.", example: "У меня 1000 фолловеров." },
+        { term: "Хайп", meaning: "Ажиотаж.", example: "Вокруг этой игры большой хайп." },
+        { term: "Хейт", meaning: "Негатив.", example: "Не читай хейт в комментариях." },
+        { term: "Хейтер", meaning: "Человек, распространяющий негатив.", example: "Хейтеры пишут гадости." },
+        { term: "Челлендж", meaning: "Интернет-вызов.", example: "Прошел челлендж на 24 часа без телефона." },
+        { term: "Чекнуть", meaning: "Проверить.", example: "Чекни сообщение в телеграме." },
+        { term: "ЧС", meaning: "Чёрный список.", example: "Добавь его в ЧС и забудь." },
+        { term: "Шеймить", meaning: "Публично осуждать.", example: "Не надо шеймить за внешность." },
+        { term: "Шипперить", meaning: "Представлять людей парой.", example: "Фанаты шипперят этих актеров." },
+        { term: "Юзер", meaning: "Пользователь.", example: "Этот юзер нарушает правила." },
+        { term: "Юзать", meaning: "Использовать.", example: "Какую программу ты юзаешь для монтажа?" }
+    ];
+
+    const container = document.getElementById('dictionary');
+    const searchInput = document.getElementById('search');
+    const countInfo = document.getElementById('count-info');
+
+    function displayWords(filter = '') {
+        container.innerHTML = '';
+        const filtered = words.filter(w => w.term.toLowerCase().includes(filter.toLowerCase()));
+        
+        filtered.sort((a, b) => a.term.localeCompare(b.term));
+
+        countInfo.innerText = `Всего слов: ${filtered.length}`;
+
+        if(filtered.length === 0) {
+            container.innerHTML = '<div class="no-results">У нас! Такого слова пока нет в нашем словаре :(</div>';
+            return;
+        }
+
+        filtered.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'word-card';
+            card.innerHTML = `
+                <div class="word-title">${item.term}</div>
+                <div class="details">
+                    <div><b>Значение:</b> ${item.meaning}</div>
+                    <div class="example"><b>Пример:</b> ${item.example}</div>
+                </div>
+            `;
+            card.addEventListener('click', () => card.classList.toggle('active'));
+            container.appendChild(card);
+        });
+    }
+
+    searchInput.addEventListener('input', (e) => displayWords(e.target.value));
+    displayWords();
+</script>
+
+
+</body></html>
