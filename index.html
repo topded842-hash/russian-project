@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ЭВОЛЮЦИЯ ИНТЕРНЕТА | Словарь Проекта</title>
+    <title>Мой Большой Интернет-Словарь</title>
     <style>
         /* ========== ОСНОВНЫЕ ПЕРЕМЕННЫЕ ========== */
         :root {
@@ -82,9 +82,9 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            font-size: clamp(2rem, 8vw, 3.5rem); 
+            font-size: clamp(1.8rem, 7vw, 3rem); 
             text-transform: uppercase; 
-            letter-spacing: 3px; 
+            letter-spacing: 2px; 
             margin-bottom: 10px;
             font-weight: 900;
             text-shadow: 0 0 30px rgba(233,69,96,0.3);
@@ -99,13 +99,6 @@
             text-shadow: 0 0 15px rgba(255,234,0,0.5);
         }
         
-        .subtitle {
-            color: var(--primary);
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-        }
-        
         /* Кнопка переключения режима — СТИЛЬНАЯ */
         .mode-toggle {
             position: fixed;
@@ -116,11 +109,11 @@
             backdrop-filter: blur(10px);
             border: 2px solid var(--text);
             color: var(--text);
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 50px;
             font-weight: bold;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             transition: var(--transition);
             box-shadow: 0 0 15px rgba(0,0,0,0.3);
             font-family: monospace;
@@ -143,7 +136,7 @@
         .counter { 
             color: var(--primary); 
             margin: 15px 0; 
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 500;
             letter-spacing: 1px;
         }
@@ -154,13 +147,13 @@
             width: 90%; 
             max-width: 650px; 
             margin: 0 auto 30px; 
-            padding: 16px 28px; 
+            padding: 14px 24px; 
             border: 3px solid var(--text); 
             border-radius: 60px; 
             background: rgba(0,0,0,0.6);
             backdrop-filter: blur(5px);
             color: white; 
-            font-size: 1.1rem; 
+            font-size: 1rem; 
             outline: none; 
             transition: var(--transition);
             font-weight: 500;
@@ -179,8 +172,8 @@
         
         body.projector-mode .search-box {
             border-width: 4px;
-            font-size: 1.3rem;
-            padding: 20px 32px;
+            font-size: 1.2rem;
+            padding: 16px 28px;
         }
         
         /* ========== СЕТКА СЛОВАРЯ ========== */
@@ -196,7 +189,7 @@
         .word-card { 
             background: var(--card-bg);
             backdrop-filter: blur(5px);
-            padding: 22px 25px; 
+            padding: 18px 22px; 
             border-radius: 20px; 
             cursor: pointer; 
             border-left: 6px solid var(--text); 
@@ -216,7 +209,7 @@
             border-left: 8px solid #FFEA00 !important;
             border-right: 2px solid #FFFFFF !important;
             background: #000000 !important;
-            padding: 28px 30px !important;
+            padding: 24px 28px !important;
         }
         
         body.projector-mode .word-card:hover {
@@ -225,7 +218,7 @@
         }
         
         .word-title { 
-            font-size: 1.6rem; 
+            font-size: 1.4rem; 
             font-weight: 800; 
             color: var(--text); 
             letter-spacing: -0.5px;
@@ -233,7 +226,7 @@
         }
         
         body.projector-mode .word-title {
-            font-size: 2rem !important;
+            font-size: 1.8rem !important;
             font-weight: 900 !important;
             color: #FFEA00 !important;
             text-shadow: 2px 2px 0 #000000;
@@ -241,17 +234,17 @@
         
         .details { 
             display: none; 
-            margin-top: 18px; 
+            margin-top: 16px; 
             border-top: 2px solid rgba(255,255,255,0.15); 
-            padding-top: 18px; 
+            padding-top: 16px; 
             animation: fadeIn 0.3s ease; 
             color: #ddd; 
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
         
         body.projector-mode .details {
             border-top: 3px solid #FFFFFF;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             line-height: 1.7;
         }
         
@@ -265,7 +258,7 @@
         }
         
         .example {
-            margin-top: 12px;
+            margin-top: 10px;
             color: var(--primary);
             font-style: italic;
             padding-left: 10px;
@@ -275,7 +268,7 @@
         body.projector-mode .example {
             color: #FFFFFF !important;
             border-left-color: #FFEA00 !important;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-style: normal;
             font-weight: 500;
         }
@@ -288,33 +281,17 @@
         .no-results { 
             text-align: center; 
             color: var(--text); 
-            margin-top: 60px; 
-            font-size: 1.3rem;
+            margin-top: 50px; 
+            font-size: 1.2rem;
             font-weight: bold;
             padding: 40px;
             border: 2px dashed var(--text);
             border-radius: 30px;
         }
         
-        /* Футер */
-        footer {
-            text-align: center;
-            margin-top: 60px;
-            padding: 20px;
-            color: rgba(255,255,255,0.4);
-            font-size: 0.8rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        body.projector-mode footer {
-            color: #FFFFFF;
-            border-top-color: #FFFFFF;
-            font-size: 1rem;
-        }
-        
         /* Скролл */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
         
         ::-webkit-scrollbar-track {
@@ -332,17 +309,12 @@
 <button class="mode-toggle" id="modeToggle">🔆 ПРОЕКТОР РЕЖИМ</button>
 
 <header>
-    <h1>🌐 ЭВОЛЮЦИЯ ИНТЕРНЕТА</h1>
-    <div class="subtitle">✦ СЛОВАРЬ СОВРЕМЕННОГО ЯЗЫКА ✦</div>
-    <div class="counter" id="count-info">📖 ЗАГРУЗКА СЛОВ...</div>
-    <input type="text" id="search" class="search-box" placeholder="🔍 НАЙДИ СЛОВО... Например: Кринж, Хайп, Имба">
+    <h1>Мой Большой Интернет-Словарь</h1>
+    <div class="counter" id="count-info">📖 Загрузка слов...</div>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Начни вводить слово (например: Кринж)...">
 </header>
 
 <div class="dictionary" id="dictionary"></div>
-
-<footer>
-    <span>⚡ ПРОЕКТ: ЭВОЛЮЦИЯ СЕТЕВОГО ИНТЕРНЕТА | СЛОВАРЬ 100+ ТЕРМИНОВ ⚡</span>
-</footer>
 
 <script>
     // ========== ПОЛНЫЙ СПИСОК СЛОВ (100+ терминов) ==========
@@ -471,10 +443,10 @@
         
         filtered.sort((a, b) => a.term.localeCompare(b.term));
 
-        countInfo.innerText = `📚 ВСЕГО СЛОВ: ${filtered.length} | ЭВОЛЮЦИЯ ЯЗЫКА`;
+        countInfo.innerText = `Всего слов: ${filtered.length}`;
 
         if(filtered.length === 0) {
-            container.innerHTML = '<div class="no-results">🔍 СЛОВО НЕ НАЙДЕНО... ПОПРОБУЙ ДРУГОЕ! 🔍</div>';
+            container.innerHTML = '<div class="no-results">У нас! Такого слова пока нет в нашем словаре :(</div>';
             return;
         }
 
@@ -482,10 +454,10 @@
             const card = document.createElement('div');
             card.className = 'word-card';
             card.innerHTML = `
-                <div class="word-title">📌 ${item.term}</div>
+                <div class="word-title">${item.term}</div>
                 <div class="details">
-                    <div><b>📖 ЗНАЧЕНИЕ:</b> ${item.meaning}</div>
-                    <div class="example"><b>💬 ПРИМЕР:</b> ${item.example}</div>
+                    <div><b>Значение:</b> ${item.meaning}</div>
+                    <div class="example"><b>Пример:</b> ${item.example}</div>
                 </div>
             `;
             card.addEventListener('click', () => card.classList.toggle('active'));
