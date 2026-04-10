@@ -1,141 +1,351 @@
-<!DOCTYPE html><html lang="ru"><head>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-id="th-modified">Мой Большой Интернет-Словарь</title>
+    <title>ЭВОЛЮЦИЯ ИНТЕРНЕТА | Словарь Проекта</title>
     <style>
+        /* ========== ОСНОВНЫЕ ПЕРЕМЕННЫЕ ========== */
         :root {
             --primary: #4A90E2;
-            --bg: #1a1a2e;
-            --card-bg: #16213e;
+            --primary-glow: #4A90E2;
+            --bg: #0a0a1a;
+            --card-bg: rgba(22, 30, 62, 0.9);
             --text: #e94560;
+            --text-glow: #ff6b8a;
             --subtext: #ffffff;
+            --border-glow: #4A90E2;
+            --shadow: 0 5px 25px rgba(0,0,0,0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* ========== РЕЖИМ ПРОЕКТОРА (СУПЕР КОНТРАСТ) ========== */
+        body.projector-mode {
+            --bg: #000000 !important;
+            --card-bg: #000000 !important;
+            --subtext: #FFFFFF !important;
+            --text: #FFEA00 !important;
+            --primary: #FFEA00 !important;
+            --border-glow: #FFFFFF !important;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
         html, body {
             min-height: 100vh;
-            margin: 0;
-            padding: 0;
         }
         
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif; 
             background: var(--bg); 
             color: var(--subtext); 
-            margin: 0; 
-            padding: 20px 20px 50px 20px;
+            padding: 20px 20px 60px 20px;
             line-height: 1.6; 
             min-height: 100vh;
-            box-sizing: border-box;
+            transition: var(--transition);
+            position: relative;
         }
         
+        /* Шумовая текстура для атмосферы */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjciIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMDMiLz48L3N2Zz4=');
+            background-repeat: repeat;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        body > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* ========== ХЕДЕР С КНОПКОЙ ========== */
         header { 
             text-align: center; 
-            padding: 30px 0; 
+            padding: 20px 0 30px;
+            position: relative;
         }
         
         h1 { 
-            color: var(--text); 
-            font-size: 2.5em; 
+            background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: clamp(2rem, 8vw, 3.5rem); 
             text-transform: uppercase; 
-            letter-spacing: 2px; 
-            margin-bottom: 5px; 
+            letter-spacing: 3px; 
+            margin-bottom: 10px;
+            font-weight: 900;
+            text-shadow: 0 0 30px rgba(233,69,96,0.3);
+        }
+        
+        /* Проектор-режим для заголовка */
+        body.projector-mode h1 {
+            background: linear-gradient(135deg, #FFEA00 0%, #FFEA00 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(255,234,0,0.5);
+        }
+        
+        .subtitle {
+            color: var(--primary);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        
+        /* Кнопка переключения режима — СТИЛЬНАЯ */
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--text);
+            color: var(--text);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+        
+        .mode-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--text);
+        }
+        
+        body.projector-mode .mode-toggle {
+            background: #000000;
+            border-color: #FFEA00;
+            color: #FFEA00;
+            box-shadow: 0 0 20px #FFEA00;
+            font-weight: 900;
         }
         
         .counter { 
-            color: #888; 
-            margin-bottom: 20px; 
-            font-size: 0.9em; 
+            color: var(--primary); 
+            margin: 15px 0; 
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
         }
         
+        /* Строка поиска — МАКСИМАЛЬНО ВИДИМАЯ */
         .search-box { 
             display: block; 
             width: 90%; 
-            max-width: 600px; 
-            margin: 0 auto 40px; 
-            padding: 15px 25px; 
-            border: 2px solid var(--text); 
-            border-radius: 30px; 
-            background: transparent; 
+            max-width: 650px; 
+            margin: 0 auto 30px; 
+            padding: 16px 28px; 
+            border: 3px solid var(--text); 
+            border-radius: 60px; 
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
             color: white; 
-            font-size: 18px; 
+            font-size: 1.1rem; 
             outline: none; 
-            transition: 0.3s; 
+            transition: var(--transition);
+            font-weight: 500;
         }
         
         .search-box:focus { 
-            box-shadow: 0 0 15px var(--text); 
+            border-color: var(--primary);
+            box-shadow: 0 0 25px var(--text);
+            background: rgba(0,0,0,0.8);
         }
         
+        .search-box::placeholder {
+            color: rgba(255,255,255,0.5);
+            font-weight: 400;
+        }
+        
+        body.projector-mode .search-box {
+            border-width: 4px;
+            font-size: 1.3rem;
+            padding: 20px 32px;
+        }
+        
+        /* ========== СЕТКА СЛОВАРЯ ========== */
         .dictionary { 
-            max-width: 900px; 
+            max-width: 1000px; 
             margin: 0 auto; 
-            display: grid; 
-            gap: 15px; 
+            display: flex;
+            flex-direction: column;
+            gap: 16px; 
         }
         
+        /* КАРТОЧКИ — МОЩНЫЕ И ЧИТАЕМЫЕ */
         .word-card { 
-            background: var(--card-bg); 
-            padding: 18px; 
-            border-radius: 12px; 
+            background: var(--card-bg);
+            backdrop-filter: blur(5px);
+            padding: 22px 25px; 
+            border-radius: 20px; 
             cursor: pointer; 
-            border-left: 5px solid var(--text); 
-            transition: 0.2s; 
-            position: relative; 
+            border-left: 6px solid var(--text); 
+            border-right: 1px solid rgba(255,255,255,0.1);
+            transition: var(--transition); 
+            position: relative;
+            box-shadow: var(--shadow);
         }
         
         .word-card:hover { 
-            transform: translateY(-2px); 
-            background: #1f2d52; 
+            transform: translateX(8px) translateY(-3px); 
+            background: rgba(31, 45, 82, 0.95);
+            border-left-width: 8px;
+        }
+        
+        body.projector-mode .word-card {
+            border-left: 8px solid #FFEA00 !important;
+            border-right: 2px solid #FFFFFF !important;
+            background: #000000 !important;
+            padding: 28px 30px !important;
+        }
+        
+        body.projector-mode .word-card:hover {
+            transform: translateX(10px) translateY(-5px);
+            box-shadow: 0 0 0 2px #FFFFFF, 0 10px 40px rgba(255,255,255,0.2);
         }
         
         .word-title { 
-            font-size: 20px; 
-            font-weight: bold; 
+            font-size: 1.6rem; 
+            font-weight: 800; 
             color: var(--text); 
+            letter-spacing: -0.5px;
+            transition: var(--transition);
+        }
+        
+        body.projector-mode .word-title {
+            font-size: 2rem !important;
+            font-weight: 900 !important;
+            color: #FFEA00 !important;
+            text-shadow: 2px 2px 0 #000000;
         }
         
         .details { 
             display: none; 
-            margin-top: 12px; 
-            border-top: 1px solid #30475e; 
-            padding-top: 12px; 
-            animation: fadeIn 0.3s; 
+            margin-top: 18px; 
+            border-top: 2px solid rgba(255,255,255,0.15); 
+            padding-top: 18px; 
+            animation: fadeIn 0.3s ease; 
             color: #ddd; 
+            font-size: 1rem;
+        }
+        
+        body.projector-mode .details {
+            border-top: 3px solid #FFFFFF;
+            font-size: 1.2rem;
+            line-height: 1.7;
+        }
+        
+        body.projector-mode .details b {
+            color: #FFEA00;
+            font-weight: 900;
         }
         
         .word-card.active .details { 
             display: block; 
         }
-
+        
         .example {
-            margin-top: 8px;
-            color: #4A90E2;
+            margin-top: 12px;
+            color: var(--primary);
             font-style: italic;
+            padding-left: 10px;
+            border-left: 3px solid var(--primary);
+        }
+        
+        body.projector-mode .example {
+            color: #FFFFFF !important;
+            border-left-color: #FFEA00 !important;
+            font-size: 1.1rem;
+            font-style: normal;
+            font-weight: 500;
         }
         
         @keyframes fadeIn { 
-            from { opacity: 0; } 
-            to { opacity: 1; } 
+            from { opacity: 0; transform: translateY(-10px); } 
+            to { opacity: 1; transform: translateY(0); } 
         }
         
         .no-results { 
             text-align: center; 
-            color: #888; 
-            margin-top: 50px; 
+            color: var(--text); 
+            margin-top: 60px; 
+            font-size: 1.3rem;
+            font-weight: bold;
+            padding: 40px;
+            border: 2px dashed var(--text);
+            border-radius: 30px;
+        }
+        
+        /* Футер */
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        body.projector-mode footer {
+            color: #FFFFFF;
+            border-top-color: #FFFFFF;
+            font-size: 1rem;
+        }
+        
+        /* Скролл */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--text);
+            border-radius: 10px;
         }
     </style>
+</head>
 <body>
 
+<button class="mode-toggle" id="modeToggle">🔆 ПРОЕКТОР РЕЖИМ</button>
+
 <header>
-    <h1>СЛОВАРЬ ПРОЕКТА</h1>
-    <div class="counter" id="count-info">Загрузка слов...</div>
-    <input type="text" id="search" class="search-box" placeholder="Начни вводить слово (например: Кринж)...">
+    <h1>🌐 ЭВОЛЮЦИЯ ИНТЕРНЕТА</h1>
+    <div class="subtitle">✦ СЛОВАРЬ СОВРЕМЕННОГО ЯЗЫКА ✦</div>
+    <div class="counter" id="count-info">📖 ЗАГРУЗКА СЛОВ...</div>
+    <input type="text" id="search" class="search-box" placeholder="🔍 НАЙДИ СЛОВО... Например: Кринж, Хайп, Имба">
 </header>
 
 <div class="dictionary" id="dictionary"></div>
 
+<footer>
+    <span>⚡ ПРОЕКТ: ЭВОЛЮЦИЯ СЕТЕВОГО ИНТЕРНЕТА | СЛОВАРЬ 100+ ТЕРМИНОВ ⚡</span>
+</footer>
+
 <script>
-    // ТВОЙ ПОЛНЫЙ СПИСОК (100+ СЛОВ) С ПРИМЕРАМИ
+    // ========== ПОЛНЫЙ СПИСОК СЛОВ (100+ терминов) ==========
     const words = [
         { term: "Абьюз", meaning: "Психологическое или физическое насилие.", example: "В их отношениях был абьюз, поэтому они расстались." },
         { term: "Абьюзер", meaning: "Человек, проявляющий насилие.", example: "Он настоящий абьюзер - постоянно унижает свою девушку." },
@@ -173,7 +383,7 @@
         { term: "Зашквар", meaning: "Позорная ситуация.", example: "Носить две разные носки - зашквар." },
         { term: "Зумер", meaning: "Представитель молодого поколения.", example: "Зумеры не понимают, как жить без интернета." },
         { term: "Имба", meaning: "Что-то очень сильное, крутое.", example: "Новый скин в игре - просто имба!" },
-        { term: "ИМХО", meaning: "По моему мнению.", example: "ИМХО, этот фильд лучше первой части." },
+        { term: "ИМХО", meaning: "По моему мнению.", example: "ИМХО, этот фильм лучше первой части." },
         { term: "Инфлюенсер", meaning: "Популярный блогер.", example: "Инфлюенсеры рекламируют этот товар." },
         { term: "Инсайд", meaning: "Скрытая информация.", example: "У меня есть инсайд, что выйдет новая версия." },
         { term: "Инста", meaning: "Социальная сеть.", example: "Скинь свой ник в инсте." },
@@ -252,17 +462,19 @@
     const container = document.getElementById('dictionary');
     const searchInput = document.getElementById('search');
     const countInfo = document.getElementById('count-info');
+    const modeToggle = document.getElementById('modeToggle');
 
+    // Отображение слов
     function displayWords(filter = '') {
         container.innerHTML = '';
         const filtered = words.filter(w => w.term.toLowerCase().includes(filter.toLowerCase()));
         
         filtered.sort((a, b) => a.term.localeCompare(b.term));
 
-        countInfo.innerText = `Всего слов: ${filtered.length}`;
+        countInfo.innerText = `📚 ВСЕГО СЛОВ: ${filtered.length} | ЭВОЛЮЦИЯ ЯЗЫКА`;
 
         if(filtered.length === 0) {
-            container.innerHTML = '<div class="no-results">У нас! Такого слова пока нет в нашем словаре :(</div>';
+            container.innerHTML = '<div class="no-results">🔍 СЛОВО НЕ НАЙДЕНО... ПОПРОБУЙ ДРУГОЕ! 🔍</div>';
             return;
         }
 
@@ -270,10 +482,10 @@
             const card = document.createElement('div');
             card.className = 'word-card';
             card.innerHTML = `
-                <div class="word-title">${item.term}</div>
+                <div class="word-title">📌 ${item.term}</div>
                 <div class="details">
-                    <div><b>Значение:</b> ${item.meaning}</div>
-                    <div class="example"><b>Пример:</b> ${item.example}</div>
+                    <div><b>📖 ЗНАЧЕНИЕ:</b> ${item.meaning}</div>
+                    <div class="example"><b>💬 ПРИМЕР:</b> ${item.example}</div>
                 </div>
             `;
             card.addEventListener('click', () => card.classList.toggle('active'));
@@ -281,9 +493,28 @@
         });
     }
 
+    // Поиск
     searchInput.addEventListener('input', (e) => displayWords(e.target.value));
+    
+    // ==== РЕЖИМ ПРОЕКТОРА ====
+    let isProjectorMode = false;
+    
+    modeToggle.addEventListener('click', () => {
+        isProjectorMode = !isProjectorMode;
+        if (isProjectorMode) {
+            document.body.classList.add('projector-mode');
+            modeToggle.innerHTML = '🖥️ ОБЫЧНЫЙ РЕЖИМ';
+            modeToggle.style.background = '#000';
+        } else {
+            document.body.classList.remove('projector-mode');
+            modeToggle.innerHTML = '🔆 ПРОЕКТОР РЕЖИМ';
+            modeToggle.style.background = '';
+        }
+    });
+    
+    // Старт
     displayWords();
 </script>
 
-
-</body></html>
+</body>
+</html>
