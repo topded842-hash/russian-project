@@ -363,7 +363,8 @@
 
     function displayWords(filter = '') {
         container.innerHTML = '';
-        const filtered = words.filter(w => w.term.toLowerCase().includes(filter.toLowerCase()));
+        // 🔥 ГЛАВНОЕ ИЗМЕНЕНИЕ: startsWith вместо includes
+        const filtered = words.filter(w => w.term.toLowerCase().startsWith(filter.toLowerCase()));
         filtered.sort((a, b) => a.term.localeCompare(b.term));
         
         countInfo.innerText = `📚 Всего слов: ${filtered.length}`;
