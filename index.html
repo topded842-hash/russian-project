@@ -318,6 +318,7 @@
         { term: "Скаммер", meaning: "Мошенник.", example: "Он скаммер." },
         { term: "Скилл", meaning: "Навык.", example: "Прокачивай скилл." },
         { term: "Скрин", meaning: "Снимок экрана.", example: "Скинь скрин." },
+        { term: "Скуф", meaning: "Мужчина средних лет с типичными привычками, часто с негативным оттенком.", example: "Выглядит как типичный скуф — пивной живот и душный взгляд." },
         { term: "Слив", meaning: "Утечка.", example: "Слили базу." },
         { term: "Смайл", meaning: "Эмодзи.", example: "Поставь смайлик." },
         { term: "Спам", meaning: "Назойливые сообщения.", example: "Спам на почту." },
@@ -327,6 +328,7 @@
         { term: "Твит", meaning: "Сообщение в Twitter.", example: "Запостил твит." },
         { term: "Твитч", meaning: "Платформа для стримов.", example: "Смотрю твитч." },
         { term: "Тикток", meaning: "Соцсеть с видео.", example: "Зависаю в тиктоке." },
+        { term: "Тильт", meaning: "Состояние гнева или раздражения, обычно из-за неудач в игре.", example: "Поймал тильт после третьего поражения подряд." },
         { term: "Токсик", meaning: "Агрессивный человек.", example: "Он токсик." },
         { term: "Токсичный", meaning: "Негативный.", example: "Токсичное комьюнити." },
         { term: "Топ", meaning: "Лучший.", example: "Это топ." },
@@ -363,7 +365,6 @@
 
     function displayWords(filter = '') {
         container.innerHTML = '';
-        // 🔥 ГЛАВНОЕ ИЗМЕНЕНИЕ: startsWith вместо includes
         const filtered = words.filter(w => w.term.toLowerCase().startsWith(filter.toLowerCase()));
         filtered.sort((a, b) => a.term.localeCompare(b.term));
         
